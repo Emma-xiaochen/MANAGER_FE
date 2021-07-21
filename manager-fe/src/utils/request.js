@@ -1,5 +1,6 @@
 /**
  * axios二次封装
+ * @author Emma
  */
 import axios from 'axios'
 import config from './../config'
