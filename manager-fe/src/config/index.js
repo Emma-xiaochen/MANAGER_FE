@@ -3,7 +3,7 @@
  * @author Emma
  */
 
-const env = import.meta.env.MODE || prod;
+const env = import.meta.env.MODE || 'prod';
 const EnvConfig = {
   dev: {
     baseApi: '/',
