@@ -1,5 +1,6 @@
 /*
  * 环境配置封装
+ * @author Emma
  */
 
 const env = import.meta.env.MODE || prod;
