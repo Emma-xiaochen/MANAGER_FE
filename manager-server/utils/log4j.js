@@ -22,7 +22,7 @@ log4js.configure({
       filename: 'logs/all-logs.log'
     },
     error: {
-      type: 'file',
+      type: 'dateFile',
       filename: 'logs/log',
       pattern: 'yyyy-MM-dd.log',
       alwaysIncludePattern: true // 设置文件名称为falename + pattern
