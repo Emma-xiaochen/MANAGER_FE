@@ -1,6 +1,6 @@
 /**
  * storage二次封装
- * author Emma
+ * @author Emma
  */
 
 import config from './../config'
