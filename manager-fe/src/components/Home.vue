@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div class="basic-layout">
       <div class="nav-side"></div>
       <div class="content-right">
@@ -15,7 +14,6 @@
       </div>
     </div>
     <router-view></router-view>
-  </div>
 </template>
 
 <script>
