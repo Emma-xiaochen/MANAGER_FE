@@ -17,8 +17,8 @@ const CODE = {
 module.exports = {
   /**
    * 分页结构封装
-   * @param {Number} pageNum
-   * @param {Number} pageSize
+   * @param {number} pageNum
+   * @param {number} pageSize
    */
   pager({pageNum = 1, pageSize = 1}) {
     pageNum *= 1;
