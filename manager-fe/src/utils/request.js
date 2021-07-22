@@ -20,9 +20,7 @@ const service = axios.create({
 service.interceptors.request.use((req) => {
   // TO-DO
   const headers = req.headers;
-  if(!headers.Authorization) {
-    headers.Authorization = 'Bear Jack'
-  }
+  if(!headers.Authorization) headers.Authorization = 'Bear Jack'
   return req;
 })
 
@@ -54,8 +52,14 @@ function request (options) {
     options.params = options.data;
   } 
 
+  if (typeof options.mock != 'undefined') {
+    config.mock = options.mock;
+  }
+
+  console.log('config:', config);
+
   if(config.env === 'prod') {
-    service.defaults.baseURL = config.baseApi;
+    service.defaults.baseURL = config.baseApi
   } else {
     service.defaults.baseURL = config.mock ? config.mockApi:config.baseApi
   }
