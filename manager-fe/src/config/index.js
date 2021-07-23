@@ -8,7 +8,7 @@ const env = import.meta.env.MODE || 'prod';
 const EnvConfig = {
   // 视频中 import.meta.env.MODE 是 dev，现在已经更新为 development
   development: {
-    baseApi: '/',
+    baseApi: '/api',
     mockApi: 'https://www.fastmock.site/mock/0c6a518a94f948c5adad9279a60772dc/api'
   },
   test: {
@@ -24,7 +24,7 @@ const EnvConfig = {
 export default {
   env,
   // 当前接口执行mock
-  mock: true,
+  mock: false,
   namespace: 'manager',
   ...EnvConfig[env]
 }
