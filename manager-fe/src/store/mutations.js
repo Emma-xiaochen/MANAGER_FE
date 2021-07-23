@@ -10,4 +10,4 @@ export default {
     state.userInfo = userInfo
     storage.setItem('userInfo', userInfo)
   }
-}
+} 
