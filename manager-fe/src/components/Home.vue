@@ -1,6 +1,13 @@
 <template>
     <div class="basic-layout">
-      <div class="nav-side"></div>
+      <div class="nav-side">
+        <!-- 系统logo部分 -->
+        <div class="logo">
+          <img src="./../assets/logo.png" alt="">
+          <span>Manager</span>
+        </div>
+        <!-- 导航菜单 -->
+      </div>
       <div class="content-right">
         <div class="nav-top">
           <div class="bread">面包屑</div>
@@ -13,7 +20,6 @@
         </div>
       </div>
     </div>
-    <router-view></router-view>
 </template>
 
 <script>
