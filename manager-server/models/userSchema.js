@@ -29,4 +29,4 @@ const userSchema = mongoose.Schema({
   remark: String
 })
 
-module.exports = mongoose.model("user", userSchema, "user")
+module.exports = mongoose.model("users", userSchema, "users")
