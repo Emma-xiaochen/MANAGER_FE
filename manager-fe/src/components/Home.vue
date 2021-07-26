@@ -38,7 +38,23 @@
             <div class="menu-fold"><i class="el-icon-s-fold"></i></div>
             <div class="bread">面包屑</div>
           </div>
-          <div class="user-info">用户</div>
+          <div class="user-info">
+             <el-badge is-dot="true" class="notice" type="danger">
+               <i class="el-icon-bell"></i>
+             </el-badge>
+             <el-dropdown @command="handleLogout">
+              <span class="user-link">
+                {{userInfo.userName}}
+                <i class="el-icon--right"></i>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="email">邮箱：{{userInfo.userEmail}}</el-dropdown-item>
+                  <el-dropdown-item command="logout">退出</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+             </el-dropdown>
+          </div>
         </div>
         <div class="wrapper">
           <div class="main-page">
@@ -51,7 +67,23 @@
 
 <script>
   export default {
-    name: 'Home'
+    name: 'Home',
+    data() {
+     return {
+        userInfo: {
+          userName: 'Emma',
+          userEmail: '736202625@qq.com'
+        }
+      }
+    },
+    methods: {
+      handleLogout(key) {
+        if(key == 'email') return;
+        this.$store.commit('saveUserInfo', '');
+        this.userInfo = null;
+        this.$router.push('/login');
+      }
+    }
   }
 </script>
 
@@ -97,6 +129,29 @@
         justify-content: space-between;
         border-bottom: 1px solid #dddddd;
         padding: 0 20px;
+
+        .nav-left {
+          display: flex;
+          align-items: center;
+
+          .menu-fold {
+            font-size: 18px;
+            margin-right: 15px;
+          }
+        }
+
+        .user-info {
+
+          .notice {
+            line-height: 30px;
+            margin-right: 15px;
+          }
+
+          .user-link {
+            cursor: pointer;
+            color: #409eff;
+          }
+        }
       }
 
       .wrapper {
