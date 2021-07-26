@@ -1,9 +1,9 @@
 <template>
     <div class="basic-layout">
-      <div class="nav-side">
+      <div :class="['nav-side', isCollapse ? 'fold' : 'unfold']">
         <!-- 系统LOGO -->
         <div class="logo">
-          <img src="./../assets/logo.png" alt="">
+          <img src="./../assets/images/logo.png" alt="logo" />
           <span>Manager</span>
         </div>
         <!-- 导航菜单 -->
@@ -12,7 +12,7 @@
           background-color="#001529"
           text-color="#ffffff"
           router
-          :collapse="false"
+          :collapse="isCollapse"
           class="nav-menu">
           <el-submenu index="1">
             <template #title>
@@ -32,10 +32,10 @@
           </el-submenu>
         </el-menu>
       </div>
-      <div class="content-right">
+      <div :class="['content-right', isCollapse ? 'fold' : 'unflod']" >
         <div class="nav-top">
           <div class="nav-left">
-            <div class="menu-fold"><i class="el-icon-s-fold"></i></div>
+            <div class="menu-fold" @click="toggle"><i class="el-icon-s-fold"></i></div>
             <div class="bread">面包屑</div>
           </div>
           <div class="user-info">
@@ -70,6 +70,7 @@
     name: 'Home',
     data() {
      return {
+        isCollapse: false,
         userInfo: {
           userName: 'Emma',
           userEmail: '736202625@qq.com'
@@ -77,6 +78,9 @@
       }
     },
     methods: {
+      toggle() {
+        this.isCollapse = !this.isCollapse;
+      },
       handleLogout(key) {
         if(key == 'email') return;
         this.$store.commit('saveUserInfo', '');
@@ -94,7 +98,7 @@
     .nav-side {
       position: fixed;
       width: 200px;
-      height: 100vh;
+      // height: 100vh;
       background: #001529;
       color: #ffffff;
       overflow-y: auto;
@@ -117,10 +121,30 @@
         height: calc(100vh - 50px);
         border-right: none;
       }
+
+      // 合并
+      &.fold {
+        width: 64px;
+      }
+
+      // 展开
+      &.unfold {
+        width: 200px;
+      }
     }
 
     .content-right {
       margin-left: 200px;
+
+      // 合并
+      &.fold {
+        margin-left: 64px;
+      }
+
+      // 展开
+      &.unfold {
+        margin-left: 200px;
+      }
 
       .nav-top {
         height: 50px;
@@ -145,11 +169,12 @@
           .notice {
             line-height: 30px;
             margin-right: 15px;
+            cursor: pointer;
           }
 
           .user-link {
-            cursor: pointer;
             color: #409eff;
+            cursor: pointer;
           }
         }
       }
