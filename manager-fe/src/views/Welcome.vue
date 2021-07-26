@@ -11,7 +11,7 @@
 
 <script>
   export default {
-    name: 'Welcome',
+    name: 'welcome',
     props: ['msg']
   }
 </script>
