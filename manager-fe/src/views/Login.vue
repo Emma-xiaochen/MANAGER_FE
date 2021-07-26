@@ -66,9 +66,9 @@
 
 <style lang="scss">
   .login-wrapper {
+    display: flex;
     width: 100vw;
     height: 100vh;
-    display: flex;
     justify-content: center;
     align-items: center;
     background: #f9fcff;
@@ -78,7 +78,7 @@
       padding: 50px;
       background: #ffffff;
       border-radius: 4px;
-      box-shadow: 0px 0px 10px 3px #c7c9c4d;
+      box-shadow: 0px 0px 10px 3px #c7c9cb4d;
 
       .title {
         font-size: 50px;
