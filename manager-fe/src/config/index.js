@@ -23,7 +23,7 @@ const EnvConfig = {
 export default {
   env,
   // 当前接口执行mock
-  mock: false,
+  mock: true,
   namespace: 'manager',
   ...EnvConfig[env]
 }
