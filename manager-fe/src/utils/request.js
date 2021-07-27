@@ -56,8 +56,6 @@ function request (options) {
     config.mock = options.mock;
   }
 
-  console.log('config:', config);
-
   if(config.env === 'prod') {
     service.defaults.baseURL = config.baseApi
   } else {
