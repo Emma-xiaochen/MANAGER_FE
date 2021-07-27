@@ -8,28 +8,13 @@
         </div>
         <!-- 导航菜单 -->
         <el-menu
-          default-active="2"
+          :default-active="activeMenu"
           background-color="#001529"
           text-color="#ffffff"
           router
           :collapse="isCollapse"
           class="nav-menu">
-          <el-submenu index="1">
-            <template #title>
-              <i class="el-icon-setting"></i>
-              <span>系统管理</span>
-            </template>
-            <el-menu-item index="1-1">用户管理</el-menu-item>
-            <el-menu-item index="1-2">菜单管理</el-menu-item>
-          </el-submenu>
-           <el-submenu index="2">
-            <template #title>
-              <i class="el-icon-setting"></i>
-              <span>审批管理</span>
-            </template>
-            <el-menu-item index="2-1">休假申请</el-menu-item>
-            <el-menu-item index="2-2">待我审批</el-menu-item>
-          </el-submenu>
+          <tree-menu :userMenu="userMenu"></tree-menu>
         </el-menu>
       </div>
       <div :class="['content-right', isCollapse ? 'fold' : 'unflod']" >
@@ -39,17 +24,17 @@
             <div class="bread">面包屑</div>
           </div>
           <div class="user-info">
-             <el-badge is-dot="true" class="notice" type="danger">
+             <el-badge :is-dot="noticeCount > 0 ? true : false" class="notice" type="danger">
                <i class="el-icon-bell"></i>
              </el-badge>
              <el-dropdown @command="handleLogout">
               <span class="user-link">
-                {{userInfo.userName}}
+                {{userInfo?.userName}}
                 <i class="el-icon--right"></i>
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item command="email">邮箱：{{userInfo.userEmail}}</el-dropdown-item>
+                  <el-dropdown-item command="email">邮箱：{{userInfo?.userEmail}}</el-dropdown-item>
                   <el-dropdown-item command="logout">退出</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -66,16 +51,25 @@
 </template>
 
 <script>
+  import TreeMenu from './TreeMenu.vue'
+
   export default {
     name: 'Home',
+    components: {
+      TreeMenu,
+    },
     data() {
      return {
         isCollapse: false,
-        userInfo: {
-          userName: 'Emma',
-          userEmail: '736202625@qq.com'
-        }
+        userInfo: this.$store.state.userInfo,
+        noticeCount: 0,
+        userMenu: [],
+        activeMenu: location.hash.slice(1)
       }
+    },
+    mounted() {
+      this.getNoticeCount();
+      this.getMenuList();
     },
     methods: {
       toggle() {
@@ -86,6 +80,22 @@
         this.$store.commit('saveUserInfo', '');
         this.userInfo = null;
         this.$router.push('/login');
+      },
+      async getNoticeCount() {
+        try {
+          const count = await this.$api.noticeCount();
+          this.noticeCount = count;
+        } catch(error) {
+          console.error(error)
+        }
+      },
+      async getMenuList() {
+        try {
+          const list = await this.$api.getMenuList();
+          this.userMenu = list;
+        } catch(error) {
+          console.error(error)
+        }
       }
     }
   }
@@ -124,7 +134,7 @@
 
       // 合并
       &.fold {
-        width: 64px;
+        width: 65px;
       }
 
       // 展开
