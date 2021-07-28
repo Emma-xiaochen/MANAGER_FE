@@ -6,9 +6,9 @@
   export default {
     name: 'app',
     mounted() {
-      this.$storage.setItem('userInfo', {age: 18, name: 'jack'});
-      console.log('user=>', this.$storage.getItem("userInfo"));
-      this.$storage.clearAll();
+      // this.$storage.setItem('userInfo', {age: 18, name: 'jack'});
+      // console.log('user=>', this.$storage.getItem("userInfo"));
+      // this.$storage.clearAll();
     }
   }
 </script>
