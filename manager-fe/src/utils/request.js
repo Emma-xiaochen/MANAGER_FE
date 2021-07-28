@@ -20,7 +20,7 @@ const service = axios.create({
 service.interceptors.request.use((req) => {
   // TO-DO
   const headers = req.headers;
-  if(!headers.Authorization) headers.Authorization = 'Bear Jack'
+  if (!headers.Authorization) headers.Authorization = 'Emma';
   return req;
 })
 
