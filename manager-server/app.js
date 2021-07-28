@@ -35,6 +35,10 @@ app.use(async (ctx, next) => {
 
 router.prefix('/api')
 
+router.get('/leave/count', (ctx) => {
+  ctx.body = 'hello';
+})
+
 router.use(users.routes(), users.allowedMethods())
 
 app.use(router.routes(), router.allowedMethods())
