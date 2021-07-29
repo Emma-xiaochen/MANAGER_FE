@@ -16,6 +16,9 @@ router.post('/login', async (ctx) => {
       userPwd
     })
     const data = res._doc;
+
+    console.log('data=>', data);
+
     const token = jwt.sign({
       data: data
     }, 'secret', { expiresIn: 30 })
