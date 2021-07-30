@@ -23,7 +23,7 @@ service.interceptors.request.use((req) => {
   const headers = req.headers;
   // const { token } = storage.getItem('userInfo');
   const { token = "" } = storage.getItem('userInfo') || {};
-  if (!headers.Authorization) headers.Authorization = 'Emma ' + token;
+  if (!headers.Authorization) headers.Authorization = 'Bearer ' + token;
   return req;
 })
 
