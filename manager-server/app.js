@@ -35,6 +35,7 @@ app.use(async (ctx, next) => {
   log4js.info(`get params: ${JSON.stringify(ctx.request.query)}`)
   log4js.info(`post params: ${JSON.stringify(ctx.request.body)}`)
   await next().catch((err) => {
+    console.log('err:', err)
     if (err.status == '401') {
       ctx.status = 200;
       ctx.body = util.fail('Token认证失败', util.CODE.AUTH_ERROR)
@@ -44,19 +45,13 @@ app.use(async (ctx, next) => {
   })
 })
 
-app.use(koajwt({secret: 'secret'}))
+app.use(koajwt({ secret: 'secret' }).unless({
+  path: [/^\/api\/users\/login/]
+}))
 
 router.prefix('/api')
 
-router.get('/leave/count', (ctx) => {
-  console.log('=>', ctx.request.headers)
-  // const token = ctx.request.headers.authorization.split(' ')[1];
-  // const payload = jwt.verify(token, 'secret');
-  ctx.body = 'body';
-})
-
 router.use(users.routes(), users.allowedMethods())
-
 app.use(router.routes(), router.allowedMethods())
 
 // error-handling
