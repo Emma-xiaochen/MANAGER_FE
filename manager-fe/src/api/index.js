@@ -16,14 +16,16 @@ export default {
     return request({
       url: '/leave/count',
       method: 'get',
-      data: {}
+      data: {},
+      mock: true
     })
   },
   getMenuList(params) {
     return request({
       url: '/menu/list',
       method: 'post',
-      data: {}
+      data: {},
+      mock: true
     })
   }
 }
