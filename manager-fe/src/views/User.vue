@@ -39,7 +39,7 @@
         <el-table-column label="操作" width="150">
           <template #default="scope">
             <el-button @click="handleClick(scope.row)" size="mini">编辑</el-button>
-            <el-button type="danger" size="mini">删除</el-button>
+            <el-button type="danger" size="mini" @click="handleDel(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -119,7 +119,6 @@
           const { list, page } = await proxy.$api.getUserList(params);
           userList.value = list;
           pager.total = page.total;
-          console.log('pager.total:', pager.total);
         } catch (error) {}
       }
 
@@ -139,6 +138,14 @@
         getUserList();
       }
 
+      // 用户单个删除
+      const handleDel = async(row) => {
+        await proxy.$api.userDel({
+          userIds: [row.userId]
+        })
+        proxy.$message.success('删除成功')
+      }
+
       return {
         user,
         userList,
@@ -147,7 +154,8 @@
         getUserList,
         handleQuery,
         handleReset,
-        handleCurrentChange
+        handleCurrentChange,
+        handleDel
       }
     }
   }
