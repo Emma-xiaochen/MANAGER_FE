@@ -1,14 +1,14 @@
 <template>
   <div class="user-manage">
     <div class="query-form">
-      <el-form :inline="true" :model="user">
-        <el-form-item>
+      <el-form ref="form" :inline="true" :model="user">
+        <el-form-item label="用户ID" prop="userId">
           <el-input v-model="user.userId" placeholder="请输入用户ID"/>
         </el-form-item>
-        <el-form-item>
+        <el-form-item label="用户名称" prop="userName">
           <el-input v-model="user.userName" placeholder="请输入用户名称"/>
         </el-form-item>
-        <el-form-item>
+        <el-form-item label="状态" prop="state">
           <el-select v-model="user.state">
             <el-option :value="0" label="所有"></el-option>
             <el-option :value="1" label="在职"></el-option>
@@ -43,6 +43,14 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        class="pagination"
+        background
+        layout="prev, pager, next"
+        :total="pager.total"
+        :page-size="pager.pageSize"
+        @current-change="handleCurrentChange">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -105,13 +113,12 @@
 
       // 获取用户列表
       const getUserList = async() => {
+        let params = {...user, ...pager}
         try {
-          const { list, page } = await proxy.$api.getUserList();
+          const { list, page } = await proxy.$api.getUserList(params);
           userList.value = list;
           pager.total = page.total;
-        } catch (error) {
-
-        }
+        } catch (error) {}
       }
 
       // 查询事件，获取用户列表
@@ -121,7 +128,13 @@
 
       // 重置查询表单
       const handleReset = () => {
+        proxy.$refs.form.resetFields();
+      }
 
+      // 分页事件处理
+      const handleCurrentChange = (current) => {
+        pager.pageNum = current;
+        getUserList();
       }
 
       return {
@@ -131,7 +144,8 @@
         pager,
         getUserList,
         handleQuery,
-        handleReset
+        handleReset,
+        handleCurrentChange
       }
     }
   }
