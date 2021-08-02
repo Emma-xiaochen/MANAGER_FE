@@ -49,8 +49,8 @@
         layout="prev, pager, next"
         :total="pager.total"
         :page-size="pager.pageSize"
-        @current-change="handleCurrentChange">
-      </el-pagination>
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
@@ -72,7 +72,8 @@
       // 初始化分页对象
       const pager = reactive({
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        total: 0
       })
       // 定义动态表格-格式
       const columns = reactive([
@@ -118,6 +119,7 @@
           const { list, page } = await proxy.$api.getUserList(params);
           userList.value = list;
           pager.total = page.total;
+          console.log('pager.total:', pager.total);
         } catch (error) {}
       }
 
