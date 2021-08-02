@@ -22,6 +22,7 @@
     height: 100%;
     justify-content: center;
     align-items: center;
+    background: #ffffff;
     .content {
       position: relative;
       bottom: 40px;
