@@ -20,11 +20,19 @@ export default {
       mock: true
     })
   },
-  getMenuList(params) {
+  getMenuList() {
     return request({
       url: '/menu/list',
-      method: 'post',
+      method: 'get',
       data: {},
+      mock: true
+    })
+  },
+  getUserList(params) {
+    return request({
+      url: '/users/list',
+      method: 'get',
+      data: params,
       mock: true
     })
   }
