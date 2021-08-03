@@ -25,9 +25,9 @@
     <div class="base-table">
       <div class="action">
         <el-button type="primary">新增</el-button>
-        <el-button type="danger">批量删除</el-button>
+        <el-button type="danger" @click="handleBatchDel">批量删除</el-button>
       </div>
-      <el-table :data="userList">
+      <el-table :data="userList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
         <el-table-column
           v-for="item in columns"
@@ -75,6 +75,8 @@
         pageSize: 10,
         total: 0
       })
+      // 选中用户列表对象
+      const checkedUserIds = ref([]);
       // 定义动态表格-格式
       const columns = reactive([
         {
@@ -144,6 +146,30 @@
           userIds: [row.userId]
         })
         proxy.$message.success('删除成功')
+        getUserList();
+      }
+
+      // 用户批量删除
+      const handleBatchDel = async() => {
+        if(checkedUserIds.value.length == 0) {
+          proxy.$message.error('请选择要删除的对象')
+          return
+        }
+        await proxy.$api.userDel({
+          userIds: checkedUserIds.value
+        })
+        proxy.$message.success('删除成功')
+        getUserList();
+      }
+
+      //
+      const handleSelectionChange = (list) => {
+        console.log('list:', list);
+        let arr = [];
+        list.map((item) => {
+          arr.push(item.userId);
+        })
+        checkedUserIds.value = arr;
       }
 
       return {
@@ -151,11 +177,14 @@
         userList,
         columns,
         pager,
+        checkedUserIds,
         getUserList,
         handleQuery,
         handleReset,
         handleCurrentChange,
-        handleDel
+        handleDel,
+        handleBatchDel,
+        handleSelectionChange
       }
     }
   }
