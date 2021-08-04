@@ -241,6 +241,7 @@
         pager,
         checkedUserIds,
         showModal,
+        userForm,
         getUserList,
         handleQuery,
         handleReset,
