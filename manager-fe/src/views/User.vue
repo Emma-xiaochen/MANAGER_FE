@@ -24,7 +24,7 @@
     </div>
     <div class="base-table">
       <div class="action">
-        <el-button type="primary">新增</el-button>
+        <el-button type="primary" @click="handleCreate">新增</el-button>
         <el-button type="danger" @click="handleBatchDel">批量删除</el-button>
       </div>
       <el-table :data="userList" @selection-change="handleSelectionChange">
@@ -53,6 +53,41 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <el-dialog title="用户新增" v-model="showModal">
+      <el-form :model="userForm">
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="userForm.userName" placeholder="请输入用户名称" />
+        </el-form-item>
+        <el-form-item label="邮箱" prop="userEmail">
+          <el-input v-model="userForm.userName" placeholder="请输入用户邮箱" />
+        </el-form-item>
+        <el-form-item label="手机号" prop="userName">
+          <el-input v-model="userForm.userName" placeholder="请输入用户手机号" />
+        </el-form-item>
+        <el-form-item label="岗位" prop="userName">
+          <el-input v-model="userForm.userName" placeholder="请输入用户岗位" />
+        </el-form-item>
+        <el-form-item label="状态" prop="state">
+          <el-select v-model="userForm.state">
+            <el-option :value="1" label="在职"></el-option>
+            <el-option :value="2" label="离职"></el-option>
+            <el-option :value="3" label="试用期"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-cascader
+          :options="[]"
+          :props="{ checkStrictly: true, value: 'id', label: 'deptName' }"
+          clearable></el-cascader>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button>取 消</el-button>
+          <el-button type="primary">确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -78,6 +113,10 @@
       })
       // 选中用户列表对象
       const checkedUserIds = ref([]);
+      // 弹框显示对象
+      const showModal = ref(false);
+      // 新增用户Form对象
+      const userForm = reactive({})
       // 定义动态表格-格式
       const columns = reactive([
         {
@@ -190,19 +229,26 @@
         checkedUserIds.value = arr;
       }
 
+      // 用户
+      const handleCreate = () => {
+        showModal.value = true;
+      }
+
       return {
         user,
         userList,
         columns,
         pager,
         checkedUserIds,
+        showModal,
         getUserList,
         handleQuery,
         handleReset,
         handleCurrentChange,
         handleDel,
         handleBatchDel,
-        handleSelectionChange
+        handleSelectionChange,
+        handleCreate
       }
     }
   }
