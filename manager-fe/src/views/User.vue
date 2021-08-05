@@ -77,17 +77,27 @@
           </el-select>
         </el-form-item>
         <el-form-item label="系统角色" prop="roleList">
-          <el-select v-model="userForm.roleList" placeholder="请选择用户系统角色">
-            <el-option></el-option>
+          <el-select 
+            v-model="userForm.roleList" 
+            placeholder="请选择用户系统角色" 
+            multiple 
+            style="width: 100%">
+            <el-option
+              v-for="role in roleList"
+              :key="role._id"
+              :label="role.roleName"
+              :value="role._id">
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="部门" prop="deptId">
           <el-cascader
-          v-model="userForm.deptId"
-          placeholder="请选择所属部门"
-          :options="[]"
-          :props="{ checkStrictly: true, value: '_id', label: 'deptName' }"
-          clearable></el-cascader>
+            v-model="userForm.deptId"
+            placeholder="请选择所属部门"
+            :options="deptList"
+            :props="{ checkStrictly: true, value: '_id', label: 'deptName' }"
+            clearable>
+          </el-cascader>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -119,7 +129,7 @@
         pageNum: 1,
         pageSize: 10,
         total: 0
-      })
+      });
       // 选中用户列表对象
       const checkedUserIds = ref([]);
       // 弹框显示对象
@@ -127,7 +137,11 @@
       // 新增用户Form对象
       const userForm = reactive({
         state: 3
-      })
+      });
+      // 所有角色列表
+      const roleList = ref([]);
+      // 所有部门列表
+      const deptList = ref([]);
       // 定义表单校验规则
       const rules = reactive({
         userName: [
@@ -206,7 +220,9 @@
       
       // 初始化接口调用
       onMounted(() => {
-        getUserList()
+        getUserList();
+        getDeptList();
+        getRoleList();
       }) 
 
       // 获取用户列表
@@ -271,9 +287,20 @@
         checkedUserIds.value = arr;
       }
 
-      // 用户
+      // 用户新增
       const handleCreate = () => {
         showModal.value = true;
+      }
+
+      const getDeptList = async() => {
+        let list = await proxy.$api.getDeptList();
+        deptList.value = list.list;
+      }
+
+      // 角色列表查询
+      const getRoleList = async() => {
+        let list = await proxy.$api.getRoleList();
+        roleList.value = list.list;
       }
 
       return {
@@ -285,6 +312,8 @@
         showModal,
         userForm,
         rules,
+        roleList,
+        deptList,
         getUserList,
         handleQuery,
         handleReset,
@@ -292,7 +321,9 @@
         handleDel,
         handleBatchDel,
         handleSelectionChange,
-        handleCreate
+        handleCreate,
+        getDeptList,
+        getRoleList
       }
     }
   }
