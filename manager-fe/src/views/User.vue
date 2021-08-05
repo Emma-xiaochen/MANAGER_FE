@@ -54,18 +54,20 @@
       />
     </div>
     <el-dialog title="用户新增" v-model="showModal">
-      <el-form :model="userForm">
+      <el-form ref="dialogForm" :model="userForm" label-width="100px" :rules="rules">
         <el-form-item label="用户名" prop="userName">
           <el-input v-model="userForm.userName" placeholder="请输入用户名称" />
         </el-form-item>
         <el-form-item label="邮箱" prop="userEmail">
-          <el-input v-model="userForm.userName" placeholder="请输入用户邮箱" />
+          <el-input v-model="userForm.userEmail" placeholder="请输入用户邮箱">
+            <template #append>@qq.com</template>
+          </el-input>
         </el-form-item>
-        <el-form-item label="手机号" prop="userName">
-          <el-input v-model="userForm.userName" placeholder="请输入用户手机号" />
+        <el-form-item label="手机号" prop="mobile">
+          <el-input v-model="userForm.mobile" placeholder="请输入用户手机号" />
         </el-form-item>
-        <el-form-item label="岗位" prop="userName">
-          <el-input v-model="userForm.userName" placeholder="请输入用户岗位" />
+        <el-form-item label="岗位" prop="job">
+          <el-input v-model="userForm.job" placeholder="请输入用户岗位" />
         </el-form-item>
         <el-form-item label="状态" prop="state">
           <el-select v-model="userForm.state">
@@ -74,10 +76,17 @@
             <el-option :value="3" label="试用期"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
+        <el-form-item label="系统角色" prop="roleList">
+          <el-select v-model="userForm.roleList" placeholder="请选择用户系统角色">
+            <el-option></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="部门" prop="deptId">
           <el-cascader
+          v-model="userForm.deptId"
+          placeholder="请选择所属部门"
           :options="[]"
-          :props="{ checkStrictly: true, value: 'id', label: 'deptName' }"
+          :props="{ checkStrictly: true, value: '_id', label: 'deptName' }"
           clearable></el-cascader>
         </el-form-item>
       </el-form>
@@ -101,7 +110,7 @@
       const { proxy } = getCurrentInstance();
       // 初始化用户表单对象
       const user = reactive({
-        state: 0
+        state: 1
       });
       // 初始化用户列表数据
       const userList = ref([]);
@@ -116,7 +125,40 @@
       // 弹框显示对象
       const showModal = ref(false);
       // 新增用户Form对象
-      const userForm = reactive({})
+      const userForm = reactive({
+        state: 3
+      })
+      // 定义表单校验规则
+      const rules = reactive({
+        userName: [
+          {
+            required: true,
+            message: '请输入用户名称',
+            trigger: 'blur'
+          }
+        ],
+        userEmail: [
+          {
+            required: true,
+            message: '请输入用户邮箱',
+            trigger: 'blur'
+          }
+        ],
+        mobile: [
+          {
+            pattern: /1[3-9]\d{9}/,
+            message: '请输入正确的11位手机号',
+            trigger: 'blur'
+          }
+        ],
+        deptId: [
+          {
+            required: true,
+            message: '请输入用户邮箱',
+            trigger: 'blur'
+          }
+        ]
+      })
       // 定义动态表格-格式
       const columns = reactive([
         {
@@ -242,6 +284,7 @@
         checkedUserIds,
         showModal,
         userForm,
+        rules,
         getUserList,
         handleQuery,
         handleReset,
