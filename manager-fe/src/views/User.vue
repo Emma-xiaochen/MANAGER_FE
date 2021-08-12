@@ -104,7 +104,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="handleClose">取 消</el-button>
-          <el-button type="primary">确 定</el-button>
+          <el-button type="primary" @click="handleSubmit">确 定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -112,7 +112,7 @@
 </template>
 
 <script>
-  import { getCurrentInstance, onMounted, reactive, ref } from 'vue'
+  import { getCurrentInstance, onMounted, reactive, ref, toRaw } from 'vue'
 
   export default {
     name: 'user',
@@ -143,6 +143,8 @@
       const roleList = ref([]);
       // 所有部门列表
       const deptList = ref([]);
+      // 定义用户操作的行为
+      const action = ref('add');
       // 定义表单校验规则
       const rules = reactive({
         userName: [
@@ -310,6 +312,24 @@
         handleReset('dialogForm');
       }
 
+      // 用户提交
+      const handleSubmit = () => {
+        proxy.$refs.dialogForm.validate(async(valid) => {
+          if(valid) {
+            let params = toRaw(userForm);
+            params.userEmail += '@qq.com';
+            params.action = action.value;
+            let res = await proxy.$api.userSubmit(params);
+            if(res) {
+              showModal.value = false;
+              proxy.$message.success('用户创建成功');
+              handleReset('dialogForm');
+              getUserList();
+            }
+          }
+        })
+      }
+
       return {
         user,
         userList,
@@ -331,7 +351,8 @@
         handleCreate,
         getDeptList,
         getRoleList,
-        handleClose
+        handleClose,
+        handleSubmit
       }
     }
   }
