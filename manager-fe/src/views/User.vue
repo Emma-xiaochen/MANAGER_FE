@@ -18,7 +18,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleQuery">查询</el-button>
-          <el-button @click="handleReset">重置</el-button>
+          <el-button @click="handleReset('form')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -103,7 +103,7 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button>取 消</el-button>
+          <el-button @click="handleClose">取 消</el-button>
           <el-button type="primary">确 定</el-button>
         </span>
       </template>
@@ -242,8 +242,8 @@
       }
 
       // 重置查询表单
-      const handleReset = () => {
-        proxy.$refs.form.resetFields();
+      const handleReset = (form) => {
+        proxy.$refs[form].resetFields();
       }
 
       // 分页事件处理
@@ -304,6 +304,12 @@
         roleList.value = list;
       }
 
+      // 用户弹窗关闭
+      const handleClose = () => {
+        showModal.value = false;
+        handleReset('dialogForm');
+      }
+
       return {
         user,
         userList,
@@ -324,7 +330,8 @@
         handleSelectionChange,
         handleCreate,
         getDeptList,
-        getRoleList
+        getRoleList,
+        handleClose
       }
     }
   }
