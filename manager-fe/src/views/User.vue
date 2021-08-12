@@ -96,7 +96,8 @@
             placeholder="请选择所属部门"
             :options="deptList"
             :props="{ checkStrictly: true, value: '_id', label: 'deptName' }"
-            clearable>
+            clearable
+            style="width: 100%">
           </el-cascader>
         </el-form-item>
       </el-form>
