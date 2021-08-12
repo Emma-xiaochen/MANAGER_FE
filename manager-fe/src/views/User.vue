@@ -294,13 +294,13 @@
 
       const getDeptList = async() => {
         let list = await proxy.$api.getDeptList();
-        deptList.value = list.list;
+        deptList.value = list;
       }
 
       // 角色列表查询
       const getRoleList = async() => {
         let list = await proxy.$api.getRoleList();
-        roleList.value = list.list;
+        roleList.value = list;
       }
 
       return {
