@@ -56,10 +56,10 @@
     <el-dialog title="用户新增" v-model="showModal">
       <el-form ref="dialogForm" :model="userForm" label-width="100px" :rules="rules">
         <el-form-item label="用户名" prop="userName">
-          <el-input v-model="userForm.userName" placeholder="请输入用户名称" />
+          <el-input v-model="userForm.userName"  :disabled="action == 'edit'" placeholder="请输入用户名称" />
         </el-form-item>
         <el-form-item label="邮箱" prop="userEmail">
-          <el-input v-model="userForm.userEmail" placeholder="请输入用户邮箱">
+          <el-input v-model="userForm.userEmail" :disabled="action == 'edit'" placeholder="请输入用户邮箱">
             <template #append>@qq.com</template>
           </el-input>
         </el-form-item>
@@ -292,6 +292,7 @@
 
       // 用户新增
       const handleCreate = () => {
+        action.value = 'add';
         showModal.value = true;
       }
 
@@ -350,6 +351,7 @@
         rules,
         roleList,
         deptList,
+        action,
         getUserList,
         handleQuery,
         handleReset,
