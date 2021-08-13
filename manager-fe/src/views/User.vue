@@ -39,7 +39,7 @@
         </el-table-column>
         <el-table-column label="操作" width="150">
           <template #default="scope">
-            <el-button @click="handleClick(scope.row)" size="mini">编辑</el-button>
+            <el-button @click="handleEdit(scope.row)" size="mini">编辑</el-button>
             <el-button type="danger" size="mini" @click="handleDel(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -330,6 +330,15 @@
         })
       }
 
+      // 用户编辑
+      const handleEdit = (row) => {
+        action.value = 'edit';
+        showModal.value = true;
+        proxy.$nextTick(() => {
+          Object.assign(userForm, row);
+        });
+      };
+
       return {
         user,
         userList,
@@ -352,7 +361,8 @@
         getDeptList,
         getRoleList,
         handleClose,
-        handleSubmit
+        handleSubmit,
+        handleEdit
       }
     }
   }
