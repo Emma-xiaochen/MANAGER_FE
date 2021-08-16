@@ -9,9 +9,9 @@ const util = require('./../utils/util')
 router.prefix('/users')
 
 // 用户登录
-router.post('/login', async (ctx) => {
+router.post('/login', async (proxy) => {
   try {
-    const { userName, userPwd } = ctx.request.body;
+    const { userName, userPwd } = proxy.request.body;
     /**
      * 返回数据库指定字段，有三种方式
      * 1. 'userId userName userEmail state role deptId roleList'
@@ -33,17 +33,17 @@ router.post('/login', async (ctx) => {
     
     if (res) {
       data.token = token;
-      ctx.body = util.success({...res, token})
+      proxy.body = util.success({...res, token})
     } else {
-      ctx.body = util.fail('账号或密码不正确')
+      proxy.body = util.fail('账号或密码不正确')
     }
   } catch (error) {
-    ctx.body = util.fail(error.msg)
+    proxy.body = util.fail(error.msg)
   }
 })
 
 // 用户列表
-router.get('list', async(proxy) => {
+router.get('/list', async (proxy) => {
   const { userId, userName, state } = proxy.request.query;
   const { page, skipIndex } = util.pager(proxy.request.query);
   let params = {};
@@ -54,7 +54,8 @@ router.get('list', async(proxy) => {
     // 根据条件查询所有用户列表
     const query = User.find(params, { _id: 0, userPwd: 0 });
     const list = await query.skip(skipIndex).limit(page.pageSize);
-    const total = User.countDocuments(params);
+    const total = await User.countDocuments(params);
+    
     proxy.body = util.success({
       page: {
         ...page,
