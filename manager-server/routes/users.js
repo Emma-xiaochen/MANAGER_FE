@@ -8,6 +8,7 @@ const util = require('./../utils/util')
 
 router.prefix('/users')
 
+// 用户登录
 router.post('/login', async (ctx) => {
   try {
     const { userName, userPwd } = ctx.request.body;
@@ -38,6 +39,31 @@ router.post('/login', async (ctx) => {
     }
   } catch (error) {
     ctx.body = util.fail(error.msg)
+  }
+})
+
+// 用户列表
+router.get('list', async(proxy) => {
+  const { userId, userName, state } = proxy.request.query;
+  const { page, skipIndex } = util.pager(proxy.request.query);
+  let params = {};
+  if (userId) params.userId = userId;
+  if (userName) params.userName = userName;
+  if (state && state != '0') params.state = state;
+  try {
+    // 根据条件查询所有用户列表
+    const query = User.find(params, { _id: 0, userPwd: 0 });
+    const list = await query.skip(skipIndex).limit(page.pageSize);
+    const total = User.countDocuments(params);
+    proxy.body = util.success({
+      page: {
+        ...page,
+        total
+      },
+      list
+    })
+  } catch (error) {
+    proxy.body = util.fail(`查询异常:${error.stack}`);
   }
 })
 
