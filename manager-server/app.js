@@ -31,14 +31,14 @@ app.use(views(__dirname + '/views', {
 }))
 
 // logger
-app.use(async (ctx, next) => {
-  log4js.info(`get params: ${JSON.stringify(ctx.request.query)}`)
-  log4js.info(`post params: ${JSON.stringify(ctx.request.body)}`)
+app.use(async (proxy, next) => {
+  log4js.info(`get params: ${JSON.stringify(proxy.request.query)}`)
+  log4js.info(`post params: ${JSON.stringify(proxy.request.body)}`)
   await next().catch((err) => {
     console.log('err:', err)
     if (err.status == '401') {
-      ctx.status = 200;
-      ctx.body = util.fail('Token认证失败', util.CODE.AUTH_ERROR)
+      proxy.status = 200;
+      proxy.body = util.fail('Token认证失败', util.CODE.AUTH_ERROR)
     } else {
       throw err;
     }
@@ -55,7 +55,7 @@ router.use(users.routes(), users.allowedMethods())
 app.use(router.routes(), router.allowedMethods())
 
 // error-handling
-app.on('error', (err, ctx) => {
+app.on('error', (err, proxy) => {
   log4js.error(`${err.stack}`)
 });
 
