@@ -213,11 +213,13 @@
         },
         {
           label: '注册时间',
-          prop: 'createTime'
+          prop: 'createTime',
+          width: 180
         },
         {
           label: '最后登录时间',
-          prop: 'lastLoginTime'
+          prop: 'lastLoginTime',
+          width: 180
         }
       ])
       
