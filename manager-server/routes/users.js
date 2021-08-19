@@ -24,12 +24,12 @@ router.post('/login', async (proxy) => {
     }, 'userId userName userEmail state role deptId roleList')
     const data = res._doc;
 
-    console.log('data=>', data);
+    // console.log('data=>', data);
 
     const token = jwt.sign({
       data
     }, 'secret', { expiresIn: '1h' })
-    console.log('token=>', token);
+    // console.log('token=>', token);
     
     if (res) {
       data.token = token;
@@ -66,6 +66,19 @@ router.get('/list', async (proxy) => {
   } catch (error) {
     proxy.body = util.fail(`查询异常:${error.stack}`);
   }
+})
+
+// 用户删除/批量删除
+router.post('/delete', async (proxy) => {
+  // 待删除的用户id数据
+  const { userIds } = proxy.request.body;
+  // User.updateMany({ $or: [{ userId: 10001}, { userId: 10002 }] })
+  const res = await User.updateMany({ userId: { $in: userIds } }, { state: 2 })
+  if (res.nModified) {
+    proxy.body = util.success(res, `共删除成功${res.nModified}条`);
+    return;
+  }
+  proxy.body = util.fail('删除失败');
 })
 
 module.exports = router
