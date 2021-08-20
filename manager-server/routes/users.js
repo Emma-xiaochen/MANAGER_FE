@@ -5,6 +5,7 @@ const router = require('koa-router')()
 const User = require('./../models/userSchema')
 const Counter = require('./../models/counterSchema')
 const jwt = require('jsonwebtoken')
+const md5 = require('md5')
 const util = require('./../utils/util')
 
 router.prefix('/users')
@@ -90,8 +91,30 @@ router.post('/operate', async (proxy) => {
       proxy.body = util.fail('参数错误', util.CODE.PARAM_ERROR);
       return;
     }
-    const doc = await Counter.findOneAndUpdate({ userId }, { $inc: { sequence_value: 1 } }, { new: true });
-    console.log('doc=>', doc);
+    const res = await User.findOne({ $or: [{ userName }, { userEmail }] }, '_id userName userEmail');
+    if (res) {
+      proxy.body = util.fail(`系统监测到有重复的用户，信息如下: ${res.userNmae} - ${res.userEmail}`);
+    } else {
+      const doc = await Counter.findOneAndUpdate({ userId }, { $inc: { sequence_value: 1 } }, { new: true });
+      try {
+        const user = new User({
+          userId: doc.sequence_value,
+          userName,
+          userPwd: md5('123456'),
+          userEmail,
+          role: 1,
+          roleList,
+          job,
+          state,
+          deptId,
+          mobile
+        })
+        user.save();
+        proxy.body = util.success('', '用户创建成功');
+      } catch (error) {
+        proxy.body = util.fail(error.stack, '用户创建失败');
+      }
+    }
   } else {
     if (!deptId) {
       proxy.body = util.fail('部门不能为空', util.CODE.PARAM_ERROR);
