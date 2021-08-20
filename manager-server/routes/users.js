@@ -81,4 +81,27 @@ router.post('/delete', async (proxy) => {
   proxy.body = util.fail('删除失败');
 })
 
+// 用户新增/编辑
+router.post('/operate', async (proxy) => {
+  const { userId, userName, userEmail, mobile, job, state, roleList, deptId, action } = proxy.request.body;
+  if (action == 'add') {
+    if (!userName || !userEmail || !deptId) {
+      proxy.body = util.fail('参数错误', util.CODE.PARAM_ERROR);
+      return;
+    }
+  } else {
+    if (!deptId) {
+      proxy.body = util.fail('部门不能为空', util.CODE.PARAM_ERROR);
+      return;
+    }
+
+    try {
+      const res = await User.findOneAndUpdate({ userId }, { mobile, job, state, roleList, deptId });
+      proxy.body = util.success({}, '更新成功');
+    } catch (error) {
+      proxy.body = util.fail(error.stack, '更新失败');
+    }
+  }
+})
+
 module.exports = router
