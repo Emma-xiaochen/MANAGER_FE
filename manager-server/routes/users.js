@@ -3,6 +3,7 @@
  */
 const router = require('koa-router')()
 const User = require('./../models/userSchema')
+const Counter = require('./../models/counterSchema')
 const jwt = require('jsonwebtoken')
 const util = require('./../utils/util')
 
@@ -89,6 +90,8 @@ router.post('/operate', async (proxy) => {
       proxy.body = util.fail('参数错误', util.CODE.PARAM_ERROR);
       return;
     }
+    const doc = await Counter.findOneAndUpdate({ userId }, { $inc: { sequence_value: 1 } }, { new: true });
+    console.log('doc=>', doc);
   } else {
     if (!deptId) {
       proxy.body = util.fail('部门不能为空', util.CODE.PARAM_ERROR);
