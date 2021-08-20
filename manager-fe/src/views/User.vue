@@ -330,12 +330,10 @@
             params.userEmail += '@qq.com';
             params.action = action.value;
             let res = await proxy.$api.userSubmit(params);
-            if(res) {
-              showModal.value = false;
-              proxy.$message.success('用户创建成功');
-              handleReset('dialogForm');
-              getUserList();
-            }
+            showModal.value = false;
+            proxy.$message.success('用户创建成功');
+            handleReset('dialogForm');
+            getUserList();
           }
         })
       }
